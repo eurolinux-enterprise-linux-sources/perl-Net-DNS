@@ -1,6 +1,6 @@
 Name: perl-Net-DNS
 Version: 0.65
-Release: 2%{?dist}
+Release: 4%{?dist}
 Summary: DNS resolver modules for Perl
 License: GPL+ or Artistic
 Group: Development/Libraries
@@ -9,6 +9,8 @@ Source0: http://www.cpan.org/authors/id/O/OL/OLAF/Net-DNS-%{version}.tar.gz
 BuildRequires: perl(Digest::HMAC), perl(ExtUtils::MakeMaker), perl(Test::More), perl(Net::IP)
 BuildRequires: perl(Test::Pod)
 BuildRequires: perl(Digest::BubbleBabble)
+BuildRequires: perl(IO::Socket::INET6)
+BuildRequires: perl(Socket6)
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -37,7 +39,8 @@ objects.
 %setup -q -n Net-DNS-%{version} 
 
 %build
-%{__perl} Makefile.PL INSTALLDIRS=vendor --no-online-tests
+export PERL_MM_USE_DEFAULT=yes
+%{__perl} Makefile.PL INSTALLDIRS=perl --no-online-tests
 make %{?_smp_mflags} OPTIMIZE="$RPM_OPT_FLAGS"
 
 %install
@@ -61,25 +64,33 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc README Changes TODO
-%{perl_vendorarch}/Net/
-%exclude %{perl_vendorarch}/Net/DNS/Resolver/Cygwin.pm
-%exclude %{perl_vendorarch}/Net/DNS/Resolver/Win32.pm
-%{perl_vendorarch}/auto/Net/
+%{perl_archlib}/Net/
+%exclude %{perl_archlib}/Net/DNS/Resolver/Cygwin.pm
+%exclude %{perl_archlib}/Net/DNS/Resolver/Win32.pm
+%{perl_archlib}/auto/Net/
 %{_mandir}/man3/Net::DNS*.3*
 %exclude %{_mandir}/man3/Net::DNS::Resolver::Cygwin.3*
 %exclude %{_mandir}/man3/Net::DNS::Resolver::Win32.3*
 
 # perl-Net-DNS-Nameserver
-%exclude %{perl_vendorarch}/Net/DNS/Nameserver.pm
+%exclude %{perl_archlib}/Net/DNS/Nameserver.pm
 %exclude %{_mandir}/man3/Net::DNS::Nameserver*
 
 %files Nameserver
 %defattr(-,root,root)
-%{perl_vendorarch}/Net/DNS/Nameserver.pm
+%{perl_archlib}/Net/DNS/Nameserver.pm
 %{_mandir}/man3/Net::DNS::Nameserver*
 
 
 %changelog
+* Wed Jul 20 2011 Petr Sabata <contyk@redhat.com> - 0.65-4
+- Install to 'perl'
+- Related: rhbz#688211
+
+* Fri Jun 03 2011 Petr Sabata <contyk@redhat.com> - 0.65-3
+- Introduce IPv6 support and prevent interactive build
+- Resolves: rhbz#688211
+
 * Mon Dec  7 2009 Stepan Kasal <skasal@redhat.com> - 0.65-2
 - rebuild against perl 5.10.1
 
