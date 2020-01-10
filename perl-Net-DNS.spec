@@ -1,11 +1,13 @@
 Name: perl-Net-DNS
 Version: 0.65
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: DNS resolver modules for Perl
 License: GPL+ or Artistic
 Group: Development/Libraries
 URL: http://www.net-dns.org/
 Source0: http://www.cpan.org/authors/id/O/OL/OLAF/Net-DNS-%{version}.tar.gz
+# Fix Net::DNS fails to delete AAAA RRSets - RHBZ#766357
+Patch0: perl-Net-DNS-0.65-Fix-AAAA-removal-update.patch
 BuildRequires: perl(Digest::HMAC), perl(ExtUtils::MakeMaker), perl(Test::More), perl(Net::IP)
 BuildRequires: perl(Test::Pod)
 BuildRequires: perl(Digest::BubbleBabble)
@@ -37,6 +39,7 @@ objects.
 
 %prep
 %setup -q -n Net-DNS-%{version} 
+%patch0 -p1 
 
 %build
 export PERL_MM_USE_DEFAULT=yes
@@ -83,6 +86,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr 19 2013 Jitka Plesnikova <jplesnik@redhat.com> - 0.65-5
+- Fix Net::DNS fails to delete AAAA RRSets
+- Resolves: rhbz#766357
+
 * Wed Jul 20 2011 Petr Sabata <contyk@redhat.com> - 0.65-4
 - Install to 'perl'
 - Related: rhbz#688211
