@@ -1,6 +1,6 @@
 Name:          perl-Net-DNS
 Version:       0.72
-Release:       3%{?dist}
+Release:       5%{?dist}
 Summary:       DNS resolver modules for Perl
 # lib/Net/DNS/RR/OPT.pm:    MIT
 # netdns.c:                 ISC and MIT and BSD
@@ -123,6 +123,12 @@ make test
 %{_mandir}/man3/Net::DNS::Nameserver*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.72-5
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.72-4
+- Mass rebuild 2013-12-27
+
 * Wed May 22 2013 Petr Pisar <ppisar@redhat.com> - 0.72-3
 - Add BSD, ISC, and MIT to licenses
 - Specify all dependencies
