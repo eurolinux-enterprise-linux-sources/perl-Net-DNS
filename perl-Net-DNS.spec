@@ -1,6 +1,6 @@
 Name:          perl-Net-DNS
 Version:       0.72
-Release:       5%{?dist}
+Release:       6%{?dist}
 Summary:       DNS resolver modules for Perl
 # lib/Net/DNS/RR/OPT.pm:    MIT
 # netdns.c:                 ISC and MIT and BSD
@@ -9,6 +9,8 @@ License:       (GPL+ or Artistic) and BSD and ISC and MIT
 Group:         Development/Libraries
 URL:           http://www.net-dns.org/
 Source0:       http://search.cpan.org/CPAN/authors/id/N/NL/NLNETLABS/Net-DNS-%{version}.tar.gz
+# "memory leak in 0.72 of perl-Net-DNS", rhbz#1207802, rt#84601
+Patch0:        Net-DNS-0.72-Memory-leak.patch
 BuildRequires: %{_bindir}/iconv
 BuildRequires: perl
 BuildRequires: perl(Config)
@@ -83,6 +85,7 @@ Instances of the "Net::DNS::Nameserver" class represent DNS server objects.
 
 %prep
 %setup -q -n Net-DNS-%{version} 
+%patch0
 chmod -x demo/*
 sed -i -e '1 s,^#!/usr/local/bin/perl,#!%{__perl},' demo/*
 for i in Changes; do
@@ -123,6 +126,9 @@ make test
 %{_mandir}/man3/Net::DNS::Nameserver*
 
 %changelog
+* Tue Mar 08 2016 Petr Šabata <contyk@redhat.com> - 0.72-6
+- Fix a memory leak, rhbz#1207802, rt#81942
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.72-5
 - Mass rebuild 2014-01-24
 
